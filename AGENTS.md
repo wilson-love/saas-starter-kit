@@ -14,7 +14,7 @@
 ## 架构铁律
 
 1. **多租户**：任何新业务表必须带 `organizationId` 外键；查询按会话的 active organization 过滤；写入带当前组织 ID。禁止全局无过滤查询业务数据。
-2. 数据分级：A=外部 API（Stripe/Creem/Resend 等）、B=静态数据、C=业务规则（确定性）；D=LLM 仅允许表达层润色，默认关闭（LLM_PROVIDER=none）。LLM 永远不得生成/修改任何数字、概率、规则。
+2. 数据分级：A=外部 API（Stripe/Gumroad/Resend 等）、B=静态数据、C=业务规则（确定性）；D=LLM 仅允许表达层润色，默认关闭（LLM_PROVIDER=none）。LLM 永远不得生成/修改任何数字、概率、规则。
 3. IO/编排放 `lib/server/**` 与 `app/api/**`；纯逻辑（解析/规则/计算）独立成纯函数模块，禁止反向依赖 IO。
 4. 访问 better-sqlite3 类原生模块（satori / @resvg/resvg-js）的路由必须 `export const runtime = 'nodejs'`（不能 edge）。
 5. Billing 三铁律：验签失败即拒；事件 ID 幂等 upsert；只信服务端 webhook，前端回调不发权益。供应商差异收敛在 `lib/billing`，业务代码只依赖其抽象接口（切换 Stripe 只改配置/新增 adapter，不改业务代码）。

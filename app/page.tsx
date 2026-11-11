@@ -19,7 +19,7 @@ const STEPS = [
 const FEATURES = [
   'Magic-link auth (better-auth) with email verification',
   'Multi-tenant organizations, members and roles',
-  'Creem payment (Stripe-ready abstraction) with idempotent webhooks',
+  'Gumroad payment (provider-agnostic abstraction) with idempotent webhooks',
   'Postgres + Drizzle schema with ready migrations',
   'Resend transactional email with local dev fallback',
   'Funnel analytics + Vercel Analytics',

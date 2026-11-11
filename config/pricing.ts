@@ -16,13 +16,13 @@ export const PRICING = {
   oneoff: {
     priceUsd: 4.99,
     label: 'One-time deep access',
-    /** Creem 后台建好产品后的 checkout 链接（阶段 0），env 未配置时显示 coming soon */
+    /** Gumroad 后台建好产品后的 checkout 链接，env 未配置时显示 coming soon */
     checkoutUrlEnv: 'PAYMENT_LINK_ONEOFF',
   },
   pro: {
     priceUsd: 9.99,
     label: 'Pro (monthly)',
-    variantIdEnv: 'CREEM_PRODUCT_PRO',
+    variantIdEnv: 'GUMROAD_PRODUCT_PRO',
     features: [
       'Unlimited usage',
       'All advanced features',
@@ -32,7 +32,7 @@ export const PRICING = {
   creator: {
     priceUsd: 19.0,
     label: 'Creator (monthly)',
-    variantIdEnv: 'CREEM_PRODUCT_CREATOR',
+    variantIdEnv: 'GUMROAD_PRODUCT_CREATOR',
     features: [
       'Everything in Pro',
       'Content & export tools',

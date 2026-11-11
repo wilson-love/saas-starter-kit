@@ -74,7 +74,7 @@ export default async function AccountPage() {
         </Card>
         <Card>
           <h3 className="font-bold">Pricing</h3>
-          <p className="mt-2 text-sm text-slate-600">Free tier + paid plans via Creem checkout.</p>
+          <p className="mt-2 text-sm text-slate-600">Free tier + paid plans via Gumroad checkout.</p>
           <Link
             href="/pricing"
             className="mt-4 inline-block text-sm font-semibold text-brand-700 hover:underline"

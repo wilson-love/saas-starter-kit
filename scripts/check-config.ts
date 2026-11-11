@@ -20,11 +20,6 @@ const hostedCheckout =
   configured('PAYMENT_LINK_ONEOFF') &&
   configured('CHECKOUT_URL_PRO') &&
   configured('CHECKOUT_URL_CREATOR');
-const apiCheckout =
-  configured('CREEM_API_KEY') &&
-  configured('CREEM_PRODUCT_ONEOFF') &&
-  configured('CREEM_PRODUCT_PRO') &&
-  configured('CREEM_PRODUCT_CREATOR');
 
 const checks: Array<[string, boolean, string]> = [
   ['Local .env', fs.existsSync(envFile), 'created by pnpm setup:local'],
@@ -42,11 +37,15 @@ const checks: Array<[string, boolean, string]> = [
       !values.EMAIL_FROM!.includes('@resend.dev'),
     'verify a sending domain, then set RESEND_API_KEY and EMAIL_FROM',
   ],
-  ['Creem webhook', configured('CREEM_WEBHOOK_SECRET'), 'required before production payments'],
   [
-    'Creem checkout',
-    hostedCheckout || apiCheckout,
-    'set hosted links or API key plus all three product IDs',
+    'Gumroad webhook',
+    configured('GUMROAD_WEBHOOK_SECRET') && configured('GUMROAD_SELLER_ID'),
+    'required before production payments (Gumroad has no request signature)',
+  ],
+  [
+    'Gumroad checkout',
+    hostedCheckout,
+    'set three hosted product links: PAYMENT_LINK_ONEOFF / CHECKOUT_URL_PRO / CHECKOUT_URL_CREATOR',
   ],
   [
     'Public app URL',
@@ -55,7 +54,7 @@ const checks: Array<[string, boolean, string]> = [
   ],
 ];
 
-console.log('\noverseas-saas-starter configuration\n');
+console.log('\nsaas-starter-kit configuration\n');
 for (const [name, ok, hint] of checks) {
   console.log(`${ok ? '✓' : '○'} ${name}: ${ok ? 'configured' : 'not ready'} — ${hint}`);
 }
@@ -64,7 +63,7 @@ const strict = process.argv.includes('--strict');
 const blocking = checks.filter(
   ([name, ok]) =>
     !ok &&
-    ['Auth secret', 'Database URL', 'Resend email', 'Creem webhook', 'Creem checkout', 'Public app URL'].includes(
+    ['Auth secret', 'Database URL', 'Resend email', 'Gumroad webhook', 'Gumroad checkout', 'Public app URL'].includes(
       name,
     ),
 );

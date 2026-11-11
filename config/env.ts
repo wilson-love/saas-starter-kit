@@ -23,27 +23,23 @@ const schema = z.object({
     .string()
     .default('postgresql://user:password@localhost:5432/db'),
 
-  // ---- Billing: Creem（默认 MoR；Stripe/LemonSqueezy 预留）----
+  // ---- Billing: Gumroad（默认收款渠道；新增 Stripe/LemonSqueezy 时扩展枚举并加 adapter）----
+  // Gumroad 无请求签名，webhook 安全依赖三件套：URL 共享密钥 + seller_id 白名单 + sale_id 幂等。
   PAYMENT_PROVIDER: z.preprocess(
     (val) => (val === '' || val == null ? undefined : val),
-    z.enum(['creem', 'lemonsqueezy', 'stripe']).default('creem'),
+    z.enum(['gumroad']).default('gumroad'),
   ),
-  CREEM_API_KEY: z.string().default(''),
-  CREEM_WEBHOOK_SECRET: z.string().default(''),
-  // 注意：不能用 z.coerce.boolean()——它会把字符串 "false" 解析成 true（Boolean("false") === true），
-  // 导致生产环境误走 Creem test server 而 401。必须显式解析 'true'/'false' 字符串。
-  CREEM_TEST_MODE: z
-    .string()
-    .default('false')
-    .transform((v) => v.trim().toLowerCase() === 'true'),
-  // 阶段 0：在 Creem 后台建好产品后，把托管结账链接填到这里（零 SDK）
+  // 三个档位的 Gumroad 托管结账链接（产品页 URL，形如 https://<shop>.gumroad.com/l/<permalink>）
   PAYMENT_LINK_ONEOFF: z.string().default(''),
   CHECKOUT_URL_PRO: z.string().default(''),
   CHECKOUT_URL_CREATOR: z.string().default(''),
-  // 阶段 1：webhook 用产品 ID 反查套餐
-  CREEM_PRODUCT_PRO: z.string().default(''),
-  CREEM_PRODUCT_CREATOR: z.string().default(''),
-  CREEM_PRODUCT_ONEOFF: z.string().default(''),
+  // webhook 用 product_id 反查档位（Gumroad 产品编辑页可查）
+  GUMROAD_PRODUCT_ONEOFF: z.string().default(''),
+  GUMROAD_PRODUCT_PRO: z.string().default(''),
+  GUMROAD_PRODUCT_CREATOR: z.string().default(''),
+  // webhook 安全：URL 共享密钥（?token=…）+ seller_id 白名单
+  GUMROAD_WEBHOOK_SECRET: z.string().default(''),
+  GUMROAD_SELLER_ID: z.string().default(''),
 
   // ---- Email: Resend ----
   RESEND_API_KEY: z.string().default(''),

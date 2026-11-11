@@ -50,6 +50,30 @@ export async function grantFromEvent(input: GrantInput): Promise<boolean> {
   return true;
 }
 
+/**
+ * 撤销：把同一 customerRef 下所有 active 权益翻成 canceled/expired。
+ * 场景：Gumroad 的退款/争议/订阅取消事件与首次购买共用 customerRef，
+ * 只插入一条 canceled 记录不足以让 latestActive 失效，必须同步翻旧行。
+ */
+export async function revokeFromEvent(input: {
+  provider: string;
+  customerRef: string;
+  status: Exclude<EntitlementStatus, 'active'>;
+}): Promise<number> {
+  const rows = await db
+    .update(entitlementTable)
+    .set({ status: input.status, updatedAt: new Date() })
+    .where(
+      and(
+        eq(entitlementTable.provider, input.provider),
+        eq(entitlementTable.customerRef, input.customerRef),
+        eq(entitlementTable.status, 'active'),
+      ),
+    )
+    .returning({ id: entitlementTable.id });
+  return rows.length;
+}
+
 async function latestActive(where: { subject?: string; email?: string }): Promise<Entitlement | undefined> {
   const conditions = [];
   if (where.subject) conditions.push(eq(entitlementTable.subject, where.subject));

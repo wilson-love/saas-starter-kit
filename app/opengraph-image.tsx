@@ -59,7 +59,7 @@ export default function OpenGraphImage() {
         </div>
 
         <div style={{ display: 'flex', gap: 16 }}>
-          {['Magic-link auth', 'Organizations', 'Creem payments'].map((tag) => (
+          {['Magic-link auth', 'Organizations', 'Gumroad payments'].map((tag) => (
             <div
               key={tag}
               style={{
