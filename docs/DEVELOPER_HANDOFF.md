@@ -163,7 +163,13 @@ rsync -a --exclude '.git' --exclude 'node_modules' --exclude '.next' \
 
 ## 4. 支付接入
 
-### 4.1 Creem 全流程（默认 MoR）
+> ⚠️ **本节（4.1–4.3）仍是 Creem 口径，已停用，待重写。**
+> 当前基座实现为 **Gumroad**（`lib/billing/gumroad.ts` + `/api/billing/gumroad/webhook`）：
+> 环境变量见 `.env.example` 的 `GUMROAD_*` 段；结账为托管产品链接（`?wanted=true`）；
+> webhook 无签名，安全靠 URL 共享密钥 + `seller_id` 白名单 + `sale_id` 幂等。
+> 接入新项目时以 README 与 `lib/billing` 代码为准，不要照下文 Creem 步骤操作。
+
+### 4.1 Creem 全流程（已停用，仅留档）
 
 1. **商户注册**：Creem 官网注册（个人可开，Merchant of Record，收单/税务/退款合规由 Creem 承担）。
 2. **创建产品**：Creem 控制台 → Products → 建三个产品（对应 `config/pricing.ts` 四档中的三档）：
