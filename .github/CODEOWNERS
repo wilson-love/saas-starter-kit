@@ -1,0 +1,11 @@
+# 代码所有者配置
+# 格式：<文件路径> <@用户名或团队>
+# 单人项目，所有代码默认由 wilson-love 审核
+
+*       @wilson-love
+
+# 关键文件需要特别关注
+/src/lib/engine/      @wilson-love
+/src/lib/billing/     @wilson-love
+/src/lib/db/          @wilson-love
+/.github/workflows/   @wilson-love
